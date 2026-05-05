@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brasa & Fuego — Restaurante</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --negro: #0C0A08;
+      --carbon: #1A1612;
+      --brasa: #C8501A;
+      --oro: #D4A847;
+      --crema: #F2EDE4;
+      --gris: #8A8278;
+      --font-display: 'Cormorant Garamond', serif;
+      --font-body: 'Outfit', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--negro);
+      color: var(--crema);
+      font-family: var(--font-body);
+      font-weight: 300;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* CURSOR */
+    .cursor {
+      position: fixed;
+      width: 10px; height: 10px;
+      background: var(--brasa);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transition: transform 0.15s ease;
+      mix-blend-mode: screen;
+    }
+    .cursor-ring {
+      position: fixed;
+      width: 36px; height: 36px;
+      border: 1px solid rgba(212,168,71,0.5);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transition: all 0.3s ease;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2rem 4rem;
+      mix-blend-mode: normal;
+      transition: background 0.4s ease, padding 0.4s ease;
+    }
+    nav.scrolled {
+      background: rgba(12,10,8,0.95);
+      backdrop-filter: blur(12px);
+      padding: 1.2rem 4rem;
+      border-bottom: 1px solid rgba(212,168,71,0.1);
+    }
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      color: var(--crema);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--brasa); }
+    .nav-links {
+      display: flex;
+      gap: 3rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gris);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--oro); }
+    .nav-cta {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--negro);
+      background: var(--oro);
+      padding: 0.7rem 1.8rem;
+      text-decoration: none;
+      transition: background 0.3s, color 0.3s;
+    }
+    .nav-cta:hover { background: var(--brasa); color: var(--crema); }
+
+    /* HERO */
+    .hero {
+      position: relative;
+      height: 100vh;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: 
+        radial-gradient(ellipse at 60% 40%, rgba(200,80,26,0.18) 0%, transparent 60%),
+        radial-gradient(ellipse at 20% 80%, rgba(212,168,71,0.08) 0%, transparent 50%),
+        linear-gradient(160deg, #1A1612 0%, #0C0A08 50%, #1A0D06 100%);
+    }
+    .hero-texture {
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.015'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    /* Floating embers */
+    .ember {
+      position: absolute;
+      width: 3px; height: 3px;
+      background: var(--brasa);
+      border-radius: 50%;
+      animation: float-up linear infinite;
+      opacity: 0;
+    }
+    @keyframes float-up {
+      0% { transform: translateY(0) translateX(0); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 0.5; }
+      100% { transform: translateY(-100vh) translateX(var(--drift)); opacity: 0; }
+    }
+
+    .hero-line {
+      position: absolute;
+      top: 0; right: 25%;
+      width: 1px;
+      height: 100%;
+      background: linear-gradient(to bottom, transparent, rgba(212,168,71,0.3) 40%, rgba(212,168,71,0.1) 70%, transparent);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 0 4rem 8rem;
+      max-width: 900px;
+    }
+    .hero-pretitle {
+      font-size: 0.7rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--brasa);
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards 0.3s;
+    }
+    .hero-pretitle::before {
+      content: '';
+      display: block;
+      width: 40px;
+      height: 1px;
+      background: var(--brasa);
+    }
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(5rem, 10vw, 10rem);
+      font-weight: 300;
+      line-height: 0.9;
+      letter-spacing: -0.02em;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: fadeUp 1s ease forwards 0.5s;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--brasa);
+    }
+    .hero-title .line2 {
+      display: block;
+      text-indent: 6rem;
+    }
+    .hero-sub {
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--gris);
+      max-width: 420px;
+      line-height: 1.8;
+      margin-bottom: 3rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards 0.8s;
+    }
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 3rem;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards 1s;
+    }
+    .btn-primary {
+      display: inline-block;
+      padding: 1.1rem 3rem;
+      background: var(--brasa);
+      color: var(--crema);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--oro);
+      transform: translateX(-100%);
+      transition: transform 0.4s ease;
+    }
+    .btn-primary:hover::before { transform: translateX(0); }
+    .btn-primary span { position: relative; z-index: 1; }
+    .btn-secondary {
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gris);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      transition: color 0.3s;
+    }
+    .btn-secondary::after {
+      content: '→';
+      transition: transform 0.3s;
+    }
+    .btn-secondary:hover { color: var(--crema); }
+    .btn-secondary:hover::after { transform: translateX(4px); }
+
+    .hero-scroll {
+      position: absolute;
+      right: 4rem;
+      bottom: 6rem;
+      writing-mode: vertical-rl;
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gris);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      opacity: 0;
+      animation: fadeIn 1s ease forwards 1.5s;
+    }
+    .hero-scroll::after {
+      content: '';
+      width: 1px;
+      height: 60px;
+      background: linear-gradient(to bottom, var(--gris), transparent);
+      animation: scroll-line 2s ease infinite;
+    }
+    @keyframes scroll-line {
+      0%, 100% { opacity: 1; transform: scaleY(1); }
+      50% { opacity: 0.3; transform: scaleY(0.5); }
+    }
+
+    .hero-year {
+      position: absolute;
+      right: 4rem;
+      top: 50%;
+      font-family: var(--font-display);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      color: rgba(212,168,71,0.3);
+    }
+
+    /* ABOUT */
+    .about {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 80vh;
+    }
+    .about-visual {
+      position: relative;
+      background: var(--carbon);
+      overflow: hidden;
+    }
+    .about-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.7;
+      filter: saturate(0.6);
+    }
+    .about-img-placeholder {
+      width: 100%;
+      height: 100%;
+      min-height: 500px;
+      background: 
+        radial-gradient(ellipse at 30% 60%, rgba(200,80,26,0.3) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 30%, rgba(212,168,71,0.15) 0%, transparent 40%),
+        linear-gradient(135deg, #2A1810 0%, #1A1612 50%, #0C0A08 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .flame-icon {
+      font-size: 8rem;
+      opacity: 0.15;
+      filter: drop-shadow(0 0 40px var(--brasa));
+    }
+    .about-overlay {
+      position: absolute;
+      bottom: 3rem; left: 3rem;
+      background: rgba(12,10,8,0.85);
+      backdrop-filter: blur(10px);
+      padding: 2rem 2.5rem;
+      border-left: 2px solid var(--brasa);
+    }
+    .about-stat-num {
+      font-family: var(--font-display);
+      font-size: 3.5rem;
+      font-weight: 300;
+      color: var(--oro);
+      line-height: 1;
+    }
+    .about-stat-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gris);
+      margin-top: 0.5rem;
+    }
+
+    .about-content {
+      padding: 7rem 5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .section-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--brasa);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .section-label::before {
+      content: '';
+      width: 30px; height: 1px;
+      background: var(--brasa);
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 4vw, 4rem);
+      font-weight: 300;
+      line-height: 1.1;
+      margin-bottom: 2rem;
+    }
+    .section-title em { font-style: italic; color: var(--oro); }
+    .section-text {
+      font-size: 0.95rem;
+      color: var(--gris);
+      line-height: 2;
+      margin-bottom: 1.5rem;
+    }
+
+    .divider {
+      width: 60px; height: 1px;
+      background: linear-gradient(to right, var(--brasa), transparent);
+      margin: 3rem 0;
+    }
+
+    /* MENU */
+    .menu-section {
+      padding: 8rem 4rem;
+      position: relative;
+    }
+    .menu-section::before {
+      content: 'MENÚ';
+      position: absolute;
+      top: 4rem; left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--font-display);
+      font-size: 12rem;
+      font-weight: 600;
+      color: rgba(255,255,255,0.02);
+      white-space: nowrap;
+      pointer-events: none;
+    }
+    .menu-header {
+      text-align: center;
+      margin-bottom: 5rem;
+    }
+    .menu-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      margin-top: 3rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .menu-tab {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gris);
+      padding: 1rem 2.5rem;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.3s;
+      background: none;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+    }
+    .menu-tab.active {
+      color: var(--crema);
+      border-bottom-color: var(--brasa);
+    }
+    .menu-tab:hover { color: var(--crema); }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .menu-item {
+      padding: 2.5rem 2rem;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 2rem;
+      transition: background 0.3s;
+    }
+    .menu-item:hover { background: rgba(255,255,255,0.02); }
+    .menu-item:nth-child(odd) { border-right: 1px solid rgba(255,255,255,0.05); }
+    .menu-item-info {}
+    .menu-item-name {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 400;
+      margin-bottom: 0.5rem;
+    }
+    .menu-item-desc {
+      font-size: 0.8rem;
+      color: var(--gris);
+      line-height: 1.6;
+      max-width: 280px;
+    }
+    .menu-item-tag {
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--brasa);
+      margin-top: 0.8rem;
+      display: inline-block;
+    }
+    .menu-item-price {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 300;
+      color: var(--oro);
+      white-space: nowrap;
+    }
+
+    /* EXPERIENCIA */
+    .experience {
+      position: relative;
+      overflow: hidden;
+      padding: 10rem 0;
+      background: var(--carbon);
+    }
+    .exp-bg {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 50%, rgba(200,80,26,0.12) 0%, transparent 70%);
+    }
+    .exp-inner {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: rgba(255,255,255,0.05);
+    }
+    .exp-card {
+      background: var(--carbon);
+      padding: 5rem 3.5rem;
+      text-align: center;
+      transition: background 0.4s;
+      position: relative;
+      overflow: hidden;
+    }
+    .exp-card::before {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--brasa);
+      transform: scaleX(0);
+      transition: transform 0.4s ease;
+    }
+    .exp-card:hover::before { transform: scaleX(1); }
+    .exp-card:hover { background: rgba(26,22,18,0.8); }
+    .exp-icon {
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+      display: block;
+      filter: drop-shadow(0 0 20px rgba(212,168,71,0.4));
+    }
+    .exp-title {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 400;
+      margin-bottom: 1rem;
+    }
+    .exp-text {
+      font-size: 0.85rem;
+      color: var(--gris);
+      line-height: 1.9;
+    }
+
+    /* GALERIA */
+    .gallery {
+      padding: 8rem 4rem;
+    }
+    .gallery-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 4rem;
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: repeat(2, 280px);
+      gap: 1rem;
+    }
+    .gallery-item {
+      border-radius: 2px;
+      overflow: hidden;
+      position: relative;
+      cursor: none;
+    }
+    .gallery-item:nth-child(1) { grid-column: 1 / 6; grid-row: 1; }
+    .gallery-item:nth-child(2) { grid-column: 6 / 9; grid-row: 1; }
+    .gallery-item:nth-child(3) { grid-column: 9 / 13; grid-row: 1 / 3; }
+    .gallery-item:nth-child(4) { grid-column: 1 / 4; grid-row: 2; }
+    .gallery-item:nth-child(5) { grid-column: 4 / 9; grid-row: 2; }
+
+    .gallery-placeholder {
+      width: 100%;
+      height: 100%;
+      transition: transform 0.6s ease;
+    }
+    .gallery-item:hover .gallery-placeholder { transform: scale(1.05); }
+
+    .gp1 { background: linear-gradient(135deg, #2A1810, #C8501A30, #1A1612); }
+    .gp2 { background: linear-gradient(225deg, #1A1612, #D4A84720, #2A1810); }
+    .gp3 { background: linear-gradient(180deg, #2A1810, #C8501A20, #0C0A08); }
+    .gp4 { background: linear-gradient(45deg, #0C0A08, #D4A84730, #1A1612); }
+    .gp5 { background: linear-gradient(315deg, #1A1612, #C8501A25, #2A1810); }
+
+    .gallery-label {
+      position: absolute;
+      bottom: 1.5rem; left: 1.5rem;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(242,237,228,0.6);
+      background: rgba(12,10,8,0.6);
+      backdrop-filter: blur(4px);
+      padding: 0.4rem 0.8rem;
+    }
+
+    /* RESERVAS */
+    .reservas {
+      padding: 8rem 4rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8rem;
+      align-items: center;
+    }
+    .reservas-info {}
+    .reservas-details {
+      margin-top: 3rem;
+    }
+    .detail-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.5rem;
+      padding: 1.5rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .detail-icon { font-size: 1.2rem; }
+    .detail-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gris);
+      margin-bottom: 0.4rem;
+    }
+    .detail-value {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+    }
+
+    .form-container {
+      background: var(--carbon);
+      padding: 4rem;
+      border: 1px solid rgba(255,255,255,0.05);
+      position: relative;
+    }
+    .form-container::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 60px; height: 2px;
+      background: var(--brasa);
+    }
+    .form-title {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      margin-bottom: 2.5rem;
+    }
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    .form-label {
+      display: block;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gris);
+      margin-bottom: 0.7rem;
+    }
+    .form-input {
+      width: 100%;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--crema);
+      padding: 1rem 1.2rem;
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      font-weight: 300;
+      transition: border-color 0.3s;
+      outline: none;
+    }
+    .form-input:focus { border-color: var(--brasa); }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .btn-form {
+      width: 100%;
+      padding: 1.2rem;
+      background: var(--brasa);
+      color: var(--crema);
+      border: none;
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: none;
+      transition: background 0.3s;
+      margin-top: 0.5rem;
+    }
+    .btn-form:hover { background: var(--oro); color: var(--negro); }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid rgba(255,255,255,0.05);
+      padding: 5rem 4rem 3rem;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 4rem;
+    }
+    .footer-brand {}
+    .footer-logo {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    .footer-logo span { color: var(--brasa); }
+    .footer-tagline {
+      font-size: 0.85rem;
+      color: var(--gris);
+      line-height: 1.8;
+      max-width: 280px;
+    }
+    .footer-social {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    .social-link {
+      width: 36px; height: 36px;
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gris);
+      text-decoration: none;
+      font-size: 0.8rem;
+      transition: all 0.3s;
+    }
+    .social-link:hover {
+      border-color: var(--brasa);
+      color: var(--brasa);
+    }
+    .footer-col h4 {
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--oro);
+      margin-bottom: 2rem;
+    }
+    .footer-col ul { list-style: none; }
+    .footer-col li { margin-bottom: 1rem; }
+    .footer-col a {
+      font-size: 0.85rem;
+      color: var(--gris);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .footer-col a:hover { color: var(--crema); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.05);
+      padding: 2rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-bottom p {
+      font-size: 0.75rem;
+      color: rgba(138,130,120,0.5);
+      letter-spacing: 0.05em;
+    }
+
+    /* ANIMACIONES */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.15s; }
+    .reveal-delay-2 { transition-delay: 0.3s; }
+    .reveal-delay-3 { transition-delay: 0.45s; }
+
+    /* MOBILE NAV */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: none;
+      padding: 4px;
+    }
+    .nav-hamburger span {
+      width: 24px; height: 1px;
+      background: var(--crema);
+      transition: all 0.3s;
+    }
+
+    /* MENU PANEL */
+    .menu-panel {
+      display: none;
+    }
+    .menu-panel-content {
+      display: none;
+    }
+
+    @media (max-width: 1024px) {
+      nav { padding: 1.5rem 2rem; }
+      nav.scrolled { padding: 1rem 2rem; }
+      .nav-links, .nav-cta { display: none; }
+      .nav-hamburger { display: flex; }
+      
+      .hero-content { padding: 0 2rem 6rem; }
+      .hero-scroll { display: none; }
+      
+      .about { grid-template-columns: 1fr; }
+      .about-content { padding: 4rem 2rem; }
+      .about-img-placeholder { min-height: 350px; }
+      
+      .menu-grid { grid-template-columns: 1fr; }
+      .menu-item:nth-child(odd) { border-right: none; }
+      
+      .exp-inner { grid-template-columns: 1fr; }
+      
+      .gallery { padding: 4rem 2rem; }
+      .gallery-grid {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto;
+      }
+      .gallery-item:nth-child(1) { grid-column: 1/2; grid-row: auto; }
+      .gallery-item:nth-child(2) { grid-column: 2/3; grid-row: auto; }
+      .gallery-item:nth-child(3) { grid-column: 1/3; grid-row: auto; height: 250px; }
+      .gallery-item:nth-child(4) { grid-column: 1/2; grid-row: auto; }
+      .gallery-item:nth-child(5) { grid-column: 2/3; grid-row: auto; }
+      .gallery-placeholder { min-height: 180px; }
+      
+      .reservas { grid-template-columns: 1fr; gap: 3rem; padding: 4rem 2rem; }
+      
+      footer { grid-template-columns: 1fr 1fr; padding: 3rem 2rem; gap: 2rem; }
+      .footer-bottom { padding: 2rem; flex-direction: column; gap: 1rem; text-align: center; }
+
+      .menu-section { padding: 4rem 2rem; }
+    }
+
+    @media (max-width: 600px) {
+      .hero-title { font-size: clamp(3.5rem, 15vw, 6rem); }
+      .form-row { grid-template-columns: 1fr; }
+      footer { grid-template-columns: 1fr; }
+      .form-container { padding: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- CURSOR -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <a href="#" class="nav-logo">Brasa<span>&</span>Fuego</a>
+    <ul class="nav-links">
+      <li><a href="#nosotros">Nosotros</a></li>
+      <li><a href="#menu">Menú</a></li>
+      <li><a href="#galeria">Galería</a></li>
+      <li><a href="#reservas">Reservas</a></li>
+    </ul>
+    <a href="#reservas" class="nav-cta">Reservar Mesa</a>
+    <div class="nav-hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-texture"></div>
+    <div class="hero-line"></div>
+
+    <!-- Embers -->
+    <div class="ember" style="left:15%; bottom:0; animation-duration:8s; animation-delay:0s; --drift:20px;"></div>
+    <div class="ember" style="left:30%; bottom:0; animation-duration:10s; animation-delay:2s; --drift:-15px; width:4px; height:4px;"></div>
+    <div class="ember" style="left:50%; bottom:0; animation-duration:7s; animation-delay:1s; --drift:30px;"></div>
+    <div class="ember" style="left:65%; bottom:0; animation-duration:12s; animation-delay:3s; --drift:-25px; width:2px; height:2px;"></div>
+    <div class="ember" style="left:80%; bottom:0; animation-duration:9s; animation-delay:0.5s; --drift:10px;"></div>
+    <div class="ember" style="left:45%; bottom:0; animation-duration:11s; animation-delay:4s; --drift:-30px; background: var(--oro);"></div>
+    <div class="ember" style="left:22%; bottom:0; animation-duration:6s; animation-delay:1.5s; --drift:18px; background: var(--oro);"></div>
+
+    <span class="hero-year">EST. 2019</span>
+
+    <div class="hero-content">
+      <p class="hero-pretitle">Parrilla & Cocina de Fuego</p>
+      <h1 class="hero-title">
+        Brasa<em>&</em><br>
+        <span class="line2">Fuego</span>
+      </h1>
+      <p class="hero-sub">Donde el fuego lento transforma ingredientes en memorias. Una experiencia que va más allá de la comida.</p>
+      <div class="hero-actions">
+        <a href="#reservas" class="btn-primary"><span>Reservar Mesa</span></a>
+        <a href="#menu" class="btn-secondary">Ver el Menú</a>
+      </div>
+    </div>
+
+    <div class="hero-scroll">Scroll</div>
+  </section>
+
+  <!-- NOSOTROS -->
+  <section class="about" id="nosotros">
+    <div class="about-visual">
+      <div class="about-img-placeholder">
+        <span class="flame-icon">🔥</span>
+      </div>
+      <div class="about-overlay">
+        <div class="about-stat-num">15+</div>
+        <div class="about-stat-label">Años de fuego lento</div>
+      </div>
+    </div>
+    <div class="about-content">
+      <p class="section-label reveal">Nuestra historia</p>
+      <h2 class="section-title reveal reveal-delay-1">El arte de<br><em>cocinar con fuego</em></h2>
+      <div class="divider reveal reveal-delay-1"></div>
+      <p class="section-text reveal reveal-delay-2">Nació de una obsesión: entender cómo el fuego cambia la naturaleza de los ingredientes. No como técnica, sino como diálogo. Cada corte, cada vegetal, cada pescado tiene su punto.</p>
+      <p class="section-text reveal reveal-delay-2">Trabajamos con productores locales que comparten nuestra filosofía. Sin intermediarios, sin frigoríficos industriales. De la tierra a la brasa.</p>
+      <p class="section-text reveal reveal-delay-3">Nuestro chef lleva 15 años perfeccionando la lectura del fuego. Hoy, cada plato es el resultado de miles de horas aprendiendo a escuchar las brasas.</p>
+    </div>
+  </section>
+
+  <!-- MENÚ -->
+  <section class="menu-section" id="menu">
+    <div class="menu-header">
+      <p class="section-label reveal" style="justify-content:center">La Carta</p>
+      <h2 class="section-title reveal reveal-delay-1" style="font-size: clamp(2.5rem,5vw,5rem)">Fuego en cada <em>plato</em></h2>
+    </div>
+
+    <div class="menu-tabs reveal">
+      <button class="menu-tab active" onclick="setTab(this,'entrantes')">Entrantes</button>
+      <button class="menu-tab" onclick="setTab(this,'principales')">Principales</button>
+      <button class="menu-tab" onclick="setTab(this,'postres')">Postres</button>
+      <button class="menu-tab" onclick="setTab(this,'bebidas')">Bebidas</button>
+    </div>
+
+    <div class="menu-grid" id="menu-content" style="margin-top:3rem;">
+      <!-- Entrantes por defecto -->
+      <div class="menu-item reveal">
+        <div class="menu-item-info">
+          <div class="menu-item-name">Provoleta a la Brasa</div>
+          <div class="menu-item-desc">Queso provolone ahumado, orégano fresco, tomates cherry confitados</div>
+          <span class="menu-item-tag">Clásico</span>
+        </div>
+        <div class="menu-item-price">$2.800</div>
+      </div>
+      <div class="menu-item reveal reveal-delay-1">
+        <div class="menu-item-info">
+          <div class="menu-item-name">Chorizo Artesanal</div>
+          <div class="menu-item-desc">De cerdo criollo, chimichurri de la casa, pan de campo</div>
+          <span class="menu-item-tag">Imperdible</span>
+        </div>
+        <div class="menu-item-price">$2.400</div>
+      </div>
+      <div class="menu-item reveal reveal-delay-1">
+        <div class="menu-item-info">
+          <div class="menu-item-name">Tabla del Asador</div>
+          <div class="menu-item-desc">Morcilla, chinchulines, riñones, mollejas. Para 2 personas</div>
+          <span class="menu-item-tag">Para compartir</span>
+        </div>
+        <div class="menu-item-price">$5.600</div>
+      </div>
+      <div class="menu-item reveal reveal-delay-2">
+        <div class="menu-item-info">
+          <div class="menu-item-name">Bondiola Confitada</div>
+          <div class="menu-item-desc">12 horas de cocción lenta, salsa de ciruelas ahumadas</div>
+          <span class="menu-item-tag">Firma</span>
+        </div>
+        <div class="menu-item-price">$3.200</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCIA -->
+  <section class="experience">
+    <div class="exp-bg"></div>
+    <div class="exp-inner">
+      <div class="exp-card reveal">
+        <span class="exp-icon">🥩</span>
+        <h3 class="exp-title">Carnes Premium</h3>
+        <p class="exp-text">Trabajamos exclusivamente con frigoríficos artesanales de la región. Maduración mínima de 21 días para los cortes de autor.</p>
+      </div>
+      <div class="exp-card reveal reveal-delay-1">
+        <span class="exp-icon">🌿</span>
+        <h3 class="exp-title">Producto de Estación</h3>
+        <p class="exp-text">La carta cambia con las estaciones. Trabajamos con 12 productores locales que nos proveen verduras y hierbas frescas cada semana.</p>
+      </div>
+      <div class="exp-card reveal reveal-delay-2">
+        <span class="exp-icon">🍷</span>
+        <h3 class="exp-title">Cava Propia</h3>
+        <p class="exp-text">Más de 80 etiquetas seleccionadas. El sommelier sugiere el maridaje perfecto para cada plato y cada momento de la velada.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALERÍA -->
+  <section class="gallery" id="galeria">
+    <div class="gallery-header">
+      <div>
+        <p class="section-label reveal">Galería</p>
+        <h2 class="section-title reveal reveal-delay-1">El <em>ambiente</em></h2>
+      </div>
+      <a href="#" class="btn-secondary reveal" style="color:var(--gris)">Ver más fotos</a>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item">
+        <div class="gallery-placeholder gp1" style="min-height:280px; display:flex; align-items:center; justify-content:center;">
+          <span style="font-size:4rem; opacity:0.2">🔥</span>
+        </div>
+        <div class="gallery-label">La parrilla</div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-placeholder gp2" style="min-height:280px; display:flex; align-items:center; justify-content:center;">
+          <span style="font-size:4rem; opacity:0.2">🥂</span>
+        </div>
+        <div class="gallery-label">El salón</div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-placeholder gp3" style="min-height:100%; display:flex; align-items:center; justify-content:center;">
+          <span style="font-size:4rem; opacity:0.2">🍽️</span>
+        </div>
+        <div class="gallery-label">Los platos</div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-placeholder gp4" style="min-height:280px; display:flex; align-items:center; justify-content:center;">
+          <span style="font-size:4rem; opacity:0.2">🌿</span>
+        </div>
+        <div class="gallery-label">Los ingredientes</div>
+      </div>
+      <div class="gallery-item">
+        <div class="gallery-placeholder gp5" style="min-height:280px; display:flex; align-items:center; justify-content:center;">
+          <span style="font-size:4rem; opacity:0.2">🍷</span>
+        </div>
+        <div class="gallery-label">La cava</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESERVAS -->
+  <section class="reservas" id="reservas">
+    <div class="reservas-info">
+      <p class="section-label reveal">Reservas</p>
+      <h2 class="section-title reveal reveal-delay-1">Reservá tu <em>mesa</em></h2>
+      <p class="section-text reveal reveal-delay-2">Recomendamos hacer tu reserva con al menos 48 horas de anticipación, especialmente los fines de semana.</p>
+      <div class="reservas-details reveal reveal-delay-2">
+        <div class="detail-row">
+          <span class="detail-icon">📍</span>
+          <div>
+            <div class="detail-label">Ubicación</div>
+            <div class="detail-value">Av. del Libertador 4580, Palermo</div>
+          </div>
+        </div>
+        <div class="detail-row">
+          <span class="detail-icon">🕐</span>
+          <div>
+            <div class="detail-label">Horarios</div>
+            <div class="detail-value">Lun–Vie 12–16h / 20–24h<br>Sáb–Dom 12–24h</div>
+          </div>
+        </div>
+        <div class="detail-row">
+          <span class="detail-icon">📞</span>
+          <div>
+            <div class="detail-label">Teléfono</div>
+            <div class="detail-value">+54 11 4580-1234</div>
+          </div>
+        </div>
+        <div class="detail-row">
+          <span class="detail-icon">📸</span>
+          <div>
+            <div class="detail-label">Instagram</div>
+            <div class="detail-value">@brasayfuego.resto</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-container reveal">
+      <h3 class="form-title">Reservar <em style="font-style:italic; color:var(--oro)">mesa</em></h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Nombre</label>
+          <input type="text" class="form-input" placeholder="Tu nombre" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Apellido</label>
+          <input type="text" class="form-input" placeholder="Tu apellido" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-input" placeholder="tu@email.com" />
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Fecha</label>
+          <input type="date" class="form-input" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Hora</label>
+          <select class="form-input">
+            <option value="">Seleccioná</option>
+            <option>12:00</option><option>12:30</option>
+            <option>13:00</option><option>13:30</option>
+            <option>20:00</option><option>20:30</option>
+            <option>21:00</option><option>21:30</option>
+            <option>22:00</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Personas</label>
+        <select class="form-input">
+          <option>1 persona</option>
+          <option>2 personas</option>
+          <option>3 personas</option>
+          <option>4 personas</option>
+          <option>5–6 personas</option>
+          <option>7–10 personas</option>
+          <option>Evento privado (+10)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Comentarios</label>
+        <textarea class="form-input" rows="3" placeholder="Alergias, ocasiones especiales, preferencias..."></textarea>
+      </div>
+      <button class="btn-form">Confirmar Reserva</button>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-brand">
+      <div class="footer-logo">Brasa<span>&</span>Fuego</div>
+      <p class="footer-tagline">Una experiencia de fuego lento en el corazón de Palermo. Porque comer bien es un acto de cultura.</p>
+      <div class="footer-social">
+        <a href="#" class="social-link">ig</a>
+        <a href="#" class="social-link">fb</a>
+        <a href="#" class="social-link">wa</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Navegación</h4>
+      <ul>
+        <li><a href="#nosotros">Nosotros</a></li>
+        <li><a href="#menu">Menú</a></li>
+        <li><a href="#galeria">Galería</a></li>
+        <li><a href="#reservas">Reservas</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Experiencias</h4>
+      <ul>
+        <li><a href="#">Eventos Privados</a></li>
+        <li><a href="#">Cenas de Degustación</a></li>
+        <li><a href="#">Maridaje</a></li>
+        <li><a href="#">Clases de Asado</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contacto</h4>
+      <ul>
+        <li><a href="#">Libertador 4580</a></li>
+        <li><a href="#">Palermo, CABA</a></li>
+        <li><a href="#">+54 11 4580-1234</a></li>
+        <li><a href="#">hola@brasayfuego.com</a></li>
+      </ul>
+    </div>
+  </footer>
+  <div class="footer-bottom">
+    <p>© 2025 Brasa & Fuego. Todos los derechos reservados.</p>
+    <p>Diseño web por <strong style="color:var(--oro); letter-spacing:0.1em;">NÉTIKA</strong></p>
+  </div>
+
+  <script>
+    // CURSOR
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+    document.addEventListener('mousemove', e => {
+      mouseX = e.clientX; mouseY = e.clientY;
+      cursor.style.left = mouseX - 5 + 'px';
+      cursor.style.top = mouseY - 5 + 'px';
+    });
+
+    function animateRing() {
+      ringX += (mouseX - ringX - 18) * 0.12;
+      ringY += (mouseY - ringY - 18) * 0.12;
+      ring.style.left = ringX + 'px';
+      ring.style.top = ringY + 'px';
+      requestAnimationFrame(animateRing);
+    }
+    animateRing();
+
+    document.querySelectorAll('a, button, input, select, textarea').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.style.transform = 'scale(2.5)';
+        ring.style.transform = 'scale(1.5)';
+        ring.style.borderColor = 'rgba(200,80,26,0.6)';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.style.transform = 'scale(1)';
+        ring.style.transform = 'scale(1)';
+        ring.style.borderColor = 'rgba(212,168,71,0.5)';
+      });
+    });
+
+    // NAV SCROLL
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 80);
+    });
+
+    // REVEAL ON SCROLL
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.12 });
+    reveals.forEach(el => observer.observe(el));
+
+    // MENU TABS
+    const menuData = {
+      entrantes: [
+        { name: 'Provoleta a la Brasa', desc: 'Queso provolone ahumado, orégano fresco, tomates cherry confitados', tag: 'Clásico', price: '$2.800' },
+        { name: 'Chorizo Artesanal', desc: 'De cerdo criollo, chimichurri de la casa, pan de campo', tag: 'Imperdible', price: '$2.400' },
+        { name: 'Tabla del Asador', desc: 'Morcilla, chinchulines, riñones, mollejas. Para 2 personas', tag: 'Para compartir', price: '$5.600' },
+        { name: 'Bondiola Confitada', desc: '12 horas de cocción lenta, salsa de ciruelas ahumadas', tag: 'Firma', price: '$3.200' },
+      ],
+      principales: [
+        { name: 'Bife de Chorizo', desc: '400g de maduración 21 días, manteca de hierbas, papas rústicas', tag: 'Estrella', price: '$6.800' },
+        { name: 'Costillar de Cerdo', desc: 'Cocción de 8 horas, glaseado de miel y mostaza antigua', tag: 'Firma', price: '$5.400' },
+        { name: 'Ojo de Bife', desc: '350g premium, chimichurri ahumado, ensalada de rúcula', tag: 'Premium', price: '$7.200' },
+        { name: 'Pollo de Campo', desc: 'A las brasas con limón y hierbas, arroz con vegetales de temporada', tag: 'Imperdible', price: '$4.200' },
+      ],
+      postres: [
+        { name: 'Flan con Dulce de Leche', desc: 'Casero, crema batida, nueces caramelizadas', tag: 'Clásico', price: '$1.800' },
+        { name: 'Peras a las Brasas', desc: 'Con helado de vainilla artesanal y reducción de vino tinto', tag: 'Firma', price: '$2.200' },
+        { name: 'Torta de Chocolate', desc: 'Bizcochuelo húmedo, ganache de cacao 70%, frambuesas', tag: 'Favorita', price: '$2.000' },
+        { name: 'Tabla de Quesos', desc: 'Selección de 4 quesos artesanales, dulces y frutas secas', tag: 'Para compartir', price: '$3.200' },
+      ],
+      bebidas: [
+        { name: 'Vinos de la Cava', desc: 'Selección de tintos, blancos y rosados. Consultar al sommelier', tag: 'Maridaje', price: 'Desde $3.200' },
+        { name: 'Craft Beer', desc: 'IPAs, stouts y lagers de productores artesanales locales', tag: 'De autor', price: '$1.600' },
+        { name: 'Limonada de la Casa', desc: 'Con jengibre, menta y toque de jengibre natural', tag: 'Sin alcohol', price: '$1.200' },
+        { name: 'Café de Especialidad', desc: 'V60 o espresso de granos de origen único. Con o sin leche', tag: 'Para cerrar', price: '$900' },
+      ],
+    };
+
+    function setTab(btn, category) {
+      document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      const grid = document.getElementById('menu-content');
+      grid.style.opacity = '0';
+      grid.style.transform = 'translateY(10px)';
+      setTimeout(() => {
+        grid.innerHTML = menuData[category].map((item, i) => `
+          <div class="menu-item">
+            <div class="menu-item-info">
+              <div class="menu-item-name">${item.name}</div>
+              <div class="menu-item-desc">${item.desc}</div>
+              <span class="menu-item-tag">${item.tag}</span>
+            </div>
+            <div class="menu-item-price">${item.price}</div>
+          </div>
+        `).join('');
+        grid.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+        grid.style.opacity = '1';
+        grid.style.transform = 'translateY(0)';
+      }, 200);
+    }
+
+    // HAMBURGER (mobile)
+    document.getElementById('hamburger').addEventListener('click', () => {
+      alert('Menú móvil — listo para implementar drawer');
+    });
+  </script>
+</body>
+</html>

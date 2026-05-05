@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Carrusel Clínica · NÉTIKA</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Epilogue:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #111; font-family: 'Epilogue', sans-serif; display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 16px 8px; }
+
+    .slide-label { font-size: 10px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: #C9A98A; background: rgba(201,169,138,.1); border: 1px solid rgba(201,169,138,.25); padding: 5px 14px; border-radius: 20px; align-self: flex-start; margin-left: 4px; }
+    .slide-wrap { width: 100%; max-width: 540px; position: relative; }
+    .slide { width: 1080px; height: 1080px; overflow: hidden; position: relative; transform-origin: top left; }
+
+    /* ══ SLIDE 1 — PORTADA CON FOTO ══ */
+    .s1 { }
+    .s1-photo { position: absolute; inset: 0; background-image: url('https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=1080&q=85&auto=format&fit=crop'); background-size: cover; background-position: center; }
+    .s1-overlay { position: absolute; inset: 0; background: linear-gradient(145deg, rgba(28,24,22,.92) 0%, rgba(28,24,22,.5) 55%, rgba(28,24,22,.82) 100%); }
+    .s1-content { position: relative; z-index: 2; height: 100%; padding: 80px; display: flex; flex-direction: column; justify-content: space-between; }
+    .s1-top { display: flex; justify-content: space-between; align-items: flex-start; }
+    .s1-tag { font-size: 12px; letter-spacing: .3em; text-transform: uppercase; color: #C9A98A; display: flex; align-items: center; gap: 12px; }
+    .s1-tag::before { content: ''; width: 28px; height: 1px; background: #C9A98A; }
+    .s1-netika { font-family: 'DM Serif Display', serif; font-size: 16px; font-style: italic; letter-spacing: .12em; color: rgba(253,252,250,.3); }
+    .s1-title { font-family: 'DM Serif Display', serif; font-size: 116px; font-weight: 400; line-height: .88; letter-spacing: -.03em; color: #FDFCFA; }
+    .s1-title em { font-style: italic; color: #C9A98A; }
+    .s1-bottom { display: flex; justify-content: space-between; align-items: flex-end; padding-top: 40px; border-top: 1px solid rgba(255,255,255,.1); }
+    .s1-stats { display: flex; gap: 48px; }
+    .s1-sn { font-family: 'DM Serif Display', serif; font-size: 40px; font-style: italic; color: #C9A98A; line-height: 1; }
+    .s1-sl { font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: rgba(253,252,250,.35); margin-top: 6px; }
+    .s1-swipe { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: #C9A98A; display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+    .s1-swipe::after { content: '→'; }
+
+    /* ══ SLIDE 2 — HERO ══ */
+    .s2 { display: grid; grid-template-columns: 1fr 1fr; }
+    .s2-left { background: #FAFAF8; padding: 80px 64px; display: flex; flex-direction: column; justify-content: space-between; }
+    .s2-eyebrow { font-size: 11px; letter-spacing: .28em; text-transform: uppercase; color: #C9A98A; margin-bottom: 28px; display: flex; align-items: center; gap: 10px; }
+    .s2-eyebrow::before { content: ''; width: 16px; height: 1px; background: #C9A98A; }
+    .s2-title { font-family: 'DM Serif Display', serif; font-size: 76px; font-weight: 400; line-height: .9; letter-spacing: -.03em; color: #1C1C1A; }
+    .s2-title em { font-style: italic; color: #C9A98A; }
+    .s2-desc { font-size: 15px; color: #6B6560; line-height: 1.9; margin-top: 28px; font-weight: 300; }
+    .s2-actions { display: flex; flex-direction: column; gap: 14px; margin-top: 40px; }
+    .s2-btn1 { font-size: 11px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: #FAFAF8; background: #1C1C1A; padding: 16px 28px; text-align: center; }
+    .s2-btn2 { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: #1C1C1A; border: 1px solid #E8DDD0; padding: 16px 28px; text-align: center; }
+    .s2-right { position: relative; overflow: hidden; }
+    .s2-photo { position: absolute; inset: 0; background-image: url('https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?w=800&q=85&auto=format&fit=crop'); background-size: cover; background-position: center; }
+    .s2-photo-overlay { position: absolute; inset: 0; background: linear-gradient(to right, rgba(250,250,248,.15) 0%, transparent 40%); }
+    .s2-tags { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: space-between; padding: 48px 36px; z-index: 2; }
+    .s2-tag { background: rgba(250,250,248,.94); backdrop-filter: blur(8px); padding: 14px 18px; border-radius: 4px; box-shadow: 0 8px 32px rgba(0,0,0,.1); align-self: flex-start; }
+    .s2-tag:last-child { align-self: flex-end; }
+    .s2-tag-t { font-size: 12px; color: #1C1C1A; }
+    .s2-tag-s { font-size: 10px; color: #9A9690; margin-top: 3px; }
+    .s2-dot { width: 7px; height: 7px; border-radius: 50%; background: #C9A98A; display: inline-block; margin-right: 6px; animation: blink 2s ease infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
+    .s2-netika { position: absolute; bottom: 20px; right: 20px; font-family: 'DM Serif Display', serif; font-size: 12px; font-style: italic; color: rgba(253,252,250,.4); z-index: 3; }
+
+    /* ══ SLIDE 3 — SERVICIOS ══ */
+    .s3 { background: #FAFAF8; display: flex; flex-direction: column; padding: 72px; }
+    .s3-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 44px; }
+    .s3-sup { font-size: 11px; letter-spacing: .26em; text-transform: uppercase; color: #C9A98A; display: flex; align-items: center; gap: 10px; }
+    .s3-sup::before { content: ''; width: 16px; height: 1px; background: #C9A98A; }
+    .s3-title { font-family: 'DM Serif Display', serif; font-size: 52px; font-weight: 400; letter-spacing: -.02em; margin-top: 10px; color: #1C1C1A; }
+    .s3-title em { font-style: italic; color: #C9A98A; }
+    .s3-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: #E8DDD0; flex: 1; }
+    .s3-card { background: #FAFAF8; padding: 36px 28px; position: relative; overflow: hidden; }
+    .s3-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: #C9A98A; transform: scaleX(0); transform-origin: left; transition: transform .4s; }
+    .s3-num { font-family: 'DM Serif Display', serif; font-size: 44px; font-style: italic; color: #E8DDD0; line-height: 1; margin-bottom: 14px; }
+    .s3-name { font-family: 'DM Serif Display', serif; font-size: 22px; margin-bottom: 10px; color: #1C1C1A; }
+    .s3-desc { font-size: 11px; color: #6B6560; line-height: 1.7; margin-bottom: 14px; }
+    .s3-price { font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: #C9A98A; }
+    .s3-price strong { font-family: 'DM Serif Display', serif; font-size: 18px; font-style: italic; color: #1C1C1A; letter-spacing: 0; margin-right: 4px; }
+    .s3-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 28px; }
+    .s3-netika { font-family: 'DM Serif Display', serif; font-size: 14px; font-style: italic; color: #9A9690; }
+    .s3-cta { font-size: 10px; font-weight: 500; letter-spacing: .18em; text-transform: uppercase; color: #FAFAF8; background: #1C1C1A; padding: 12px 24px; }
+
+    /* ══ SLIDE 4 — PROCESO ══ */
+    .s4 { display: grid; grid-template-columns: 1fr 1fr; }
+    .s4-left { position: relative; overflow: hidden; }
+    .s4-photo { position: absolute; inset: 0; background-image: url('https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=800&q=85&auto=format&fit=crop'); background-size: cover; background-position: center; }
+    .s4-photo-overlay { position: absolute; inset: 0; background: linear-gradient(145deg, rgba(28,24,22,.7) 0%, rgba(28,24,22,.35) 100%); }
+    .s4-left-content { position: relative; z-index: 2; height: 100%; padding: 72px 56px; display: flex; flex-direction: column; justify-content: flex-end; }
+    .s4-left-title { font-family: 'DM Serif Display', serif; font-size: 72px; font-weight: 400; line-height: .92; letter-spacing: -.03em; color: #FDFCFA; margin-bottom: 28px; }
+    .s4-left-title em { font-style: italic; color: #C9A98A; }
+    .s4-left-desc { font-size: 15px; color: rgba(253,252,250,.5); line-height: 1.8; }
+    .s4-right { background: #F3EFE8; padding: 72px 56px; display: flex; flex-direction: column; justify-content: center; gap: 0; }
+    .s4-step { padding: 28px 0; border-bottom: 1px solid #E8DDD0; display: flex; gap: 24px; align-items: flex-start; }
+    .s4-step:first-child { border-top: 1px solid #E8DDD0; }
+    .s4-step-n { font-family: 'DM Serif Display', serif; font-size: 32px; font-style: italic; color: #C9A98A; flex-shrink: 0; line-height: 1; margin-top: 4px; }
+    .s4-step-t { font-family: 'DM Serif Display', serif; font-size: 20px; color: #1C1C1A; margin-bottom: 6px; }
+    .s4-step-d { font-size: 12px; color: #6B6560; line-height: 1.7; }
+    .s4-netika { font-family: 'DM Serif Display', serif; font-size: 13px; font-style: italic; color: #A8A8A4; margin-top: auto; padding-top: 28px; }
+
+    /* ══ SLIDE 5 — TESTIMONIOS ══ */
+    .s5 { position: relative; overflow: hidden; }
+    .s5-photo { position: absolute; inset: 0; background-image: url('https://images.unsplash.com/photo-1519823551278-64ac92734fb1?w=1080&q=85&auto=format&fit=crop'); background-size: cover; background-position: center; }
+    .s5-overlay { position: absolute; inset: 0; background: linear-gradient(160deg, rgba(28,24,22,.96) 0%, rgba(28,24,22,.82) 100%); }
+    .s5-content { position: relative; z-index: 2; height: 100%; padding: 80px 72px; display: flex; flex-direction: column; }
+    .s5-sup { font-size: 11px; letter-spacing: .28em; text-transform: uppercase; color: rgba(201,169,138,.65); margin-bottom: 48px; display: flex; align-items: center; gap: 10px; }
+    .s5-sup::before { content: ''; width: 18px; height: 1px; background: rgba(201,169,138,.6); }
+    .s5-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; flex: 1; }
+    .s5-card { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.07); padding: 36px 28px; }
+    .s5-stars { color: #C9A98A; font-size: 13px; letter-spacing: 3px; margin-bottom: 18px; }
+    .s5-text { font-family: 'DM Serif Display', serif; font-size: 15px; font-style: italic; color: rgba(250,250,248,.72); line-height: 1.65; margin-bottom: 22px; }
+    .s5-name { font-size: 11px; font-weight: 500; color: rgba(250,250,248,.85); }
+    .s5-service { font-size: 9px; letter-spacing: .15em; text-transform: uppercase; color: #C9A98A; margin-top: 4px; }
+    .s5-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 36px; }
+    .s5-netika { font-family: 'DM Serif Display', serif; font-size: 14px; font-style: italic; color: rgba(253,252,250,.2); }
+    .s5-cta { font-size: 10px; font-weight: 500; letter-spacing: .18em; text-transform: uppercase; color: #1C1C1A; background: #C9A98A; padding: 12px 24px; }
+
+    /* ══ SLIDE 6 — CIERRE ══ */
+    .s6 { position: relative; overflow: hidden; }
+    .s6-photo { position: absolute; inset: 0; background-image: url('https://images.unsplash.com/photo-1552693673-1bf958298935?w=1080&q=85&auto=format&fit=crop'); background-size: cover; background-position: center top; }
+    .s6-overlay { position: absolute; inset: 0; background: linear-gradient(145deg, rgba(250,250,248,.97) 0%, rgba(250,250,248,.75) 50%, rgba(250,250,248,.9) 100%); }
+    .s6-content { position: relative; z-index: 2; height: 100%; padding: 80px; display: flex; flex-direction: column; justify-content: space-between; }
+    .s6-eyebrow { font-size: 11px; letter-spacing: .28em; text-transform: uppercase; color: #C9A98A; display: flex; align-items: center; gap: 12px; }
+    .s6-eyebrow::before { content: ''; width: 20px; height: 1px; background: #C9A98A; }
+    .s6-title { font-family: 'DM Serif Display', serif; font-size: 100px; font-weight: 400; line-height: .88; letter-spacing: -.03em; color: #1C1C1A; margin-top: 24px; }
+    .s6-title em { font-style: italic; color: #C9A98A; }
+    .s6-mid { border-left: 2px solid #C9A98A; padding-left: 28px; }
+    .s6-q { font-family: 'DM Serif Display', serif; font-size: 22px; font-style: italic; color: #6B6560; line-height: 1.6; }
+    .s6-bottom { display: flex; justify-content: space-between; align-items: flex-end; }
+    .s6-cl { font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: #9A9690; margin-bottom: 6px; }
+    .s6-cv { font-family: 'DM Serif Display', serif; font-size: 18px; font-style: italic; color: #1C1C1A; }
+    .s6-url { font-size: 12px; color: #9A9690; margin-top: 4px; }
+    .s6-cta { font-size: 11px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: #FAFAF8; background: #1C1C1A; padding: 18px 36px; }
+  </style>
+</head>
+<body>
+
+  <!-- SLIDE 1 -->
+  <div class="slide-label">01 / 06 — Portada</div>
+  <div class="slide-wrap">
+    <div class="slide s1">
+      <div class="s1-photo"></div>
+      <div class="s1-overlay"></div>
+      <div class="s1-content">
+        <div class="s1-top">
+          <div class="s1-tag">Diseño web · Centros estéticos</div>
+          <div class="s1-netika">Nétika</div>
+        </div>
+        <div>
+          <h1 class="s1-title">Así se ve<br>tu <em>centro</em><br>estético.</h1>
+        </div>
+        <div class="s1-bottom">
+          <div class="s1-stats">
+            <div><div class="s1-sn">+2.000</div><div class="s1-sl">Clientas satisfechas</div></div>
+            <div><div class="s1-sn">98%</div><div class="s1-sl">Recomendación</div></div>
+          </div>
+          <div class="s1-swipe">Deslizá para ver</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2 -->
+  <div class="slide-label">02 / 06 — Hero del sitio</div>
+  <div class="slide-wrap">
+    <div class="slide s2">
+      <div class="s2-left">
+        <div>
+          <div class="s2-eyebrow">Centro de Estética Avanzada</div>
+          <div class="s2-title">Tu mejor<br>versión <em>te<br>espera</em></div>
+          <div class="s2-desc">Tratamientos personalizados con tecnología de última generación. Porque cuidarte no es un lujo, es una decisión.</div>
+        </div>
+        <div class="s2-actions">
+          <div class="s2-btn1">Sacar Turno</div>
+          <div class="s2-btn2">Ver Tratamientos</div>
+        </div>
+      </div>
+      <div class="s2-right">
+        <div class="s2-photo"></div>
+        <div class="s2-photo-overlay"></div>
+        <div class="s2-tags">
+          <div class="s2-tag">
+            <div><span class="s2-dot"></span><span class="s2-tag-t">Turno disponible hoy</span></div>
+            <div class="s2-tag-s">Palermo · Vicente López</div>
+          </div>
+          <div class="s2-tag">
+            <div class="s2-tag-t">⭐ 4.9 / 5.0</div>
+            <div class="s2-tag-s">+480 reseñas verificadas</div>
+          </div>
+        </div>
+        <div class="s2-netika">Nétika</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3 -->
+  <div class="slide-label">03 / 06 — Servicios</div>
+  <div class="slide-wrap">
+    <div class="slide s3">
+      <div class="s3-header">
+        <div>
+          <div class="s3-sup">Tratamientos</div>
+          <div class="s3-title">Lo que hacemos <em>por vos</em></div>
+        </div>
+      </div>
+      <div class="s3-grid">
+        <div class="s3-card"><div class="s3-num">01</div><div class="s3-name">Depilación Láser</div><div class="s3-desc">Alexandrita + Nd:YAG. Resultados desde la primera sesión.</div><div class="s3-price"><strong>$8.500</strong> / sesión</div></div>
+        <div class="s3-card"><div class="s3-num">02</div><div class="s3-name">Facial Premium</div><div class="s3-desc">Limpieza, hidratación, peeling enzimático y vitamina C.</div><div class="s3-price"><strong>$12.000</strong> / sesión</div></div>
+        <div class="s3-card"><div class="s3-num">03</div><div class="s3-name">Radiofrecuencia</div><div class="s3-desc">Tensado de piel y remodelado corporal. Sin cirugía.</div><div class="s3-price"><strong>$15.000</strong> / sesión</div></div>
+        <div class="s3-card"><div class="s3-num">04</div><div class="s3-name">HIFU Facial</div><div class="s3-desc">Lifting sin agujas. Resultados desde la primera vez.</div><div class="s3-price"><strong>$35.000</strong> sesión única</div></div>
+        <div class="s3-card"><div class="s3-num">05</div><div class="s3-name">Masajes</div><div class="s3-desc">Drenaje linfático, descontracturante o relajante.</div><div class="s3-price"><strong>$9.500</strong> / sesión</div></div>
+        <div class="s3-card"><div class="s3-num">06</div><div class="s3-name">PRP</div><div class="s3-desc">Regeneración celular con tu propio plasma.</div><div class="s3-price"><strong>$28.000</strong> / sesión</div></div>
+      </div>
+      <div class="s3-footer">
+        <div class="s3-netika">Nétika</div>
+        <div style="font-size:10px;letter-spacing:.2em;color:#A8A8A4">03 / 06</div>
+        <div class="s3-cta">Ver todos</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4 -->
+  <div class="slide-label">04 / 06 — Proceso</div>
+  <div class="slide-wrap">
+    <div class="slide s4">
+      <div class="s4-left">
+        <div class="s4-photo"></div>
+        <div class="s4-photo-overlay"></div>
+        <div class="s4-left-content">
+          <div class="s4-left-title">Simple,<br><em>sin vueltas.</em></div>
+          <div class="s4-left-desc">Así funciona sacar un turno y arrancar tu tratamiento.</div>
+        </div>
+      </div>
+      <div class="s4-right">
+        <div class="s4-step"><div class="s4-step-n">1</div><div><div class="s4-step-t">Reservás tu turno</div><div class="s4-step-d">Online, por WhatsApp o llamando. En 2 minutos tenés tu turno confirmado.</div></div></div>
+        <div class="s4-step"><div class="s4-step-n">2</div><div><div class="s4-step-t">Diagnóstico inicial</div><div class="s4-step-d">Evaluación completa de tu piel y definición del plan personalizado.</div></div></div>
+        <div class="s4-step"><div class="s4-step-n">3</div><div><div class="s4-step-t">Tu tratamiento</div><div class="s4-step-d">Profesionales certificadas con los mejores equipos del mercado.</div></div></div>
+        <div class="s4-step"><div class="s4-step-n">4</div><div><div class="s4-step-t">Seguimiento real</div><div class="s4-step-d">Te contactamos para ver cómo evolucionás y ajustamos si es necesario.</div></div></div>
+        <div class="s4-netika">Nétika · netika.com.ar</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5 -->
+  <div class="slide-label">05 / 06 — Testimonios</div>
+  <div class="slide-wrap">
+    <div class="slide s5">
+      <div class="s5-photo"></div>
+      <div class="s5-overlay"></div>
+      <div class="s5-content">
+        <div class="s5-sup">Lo que dicen</div>
+        <div class="s5-grid">
+          <div class="s5-card"><div class="s5-stars">★★★★★</div><div class="s5-text">"Venía con desconfianza de otros centros. Acá me explicaron todo y los resultados fueron increíbles."</div><div class="s5-name">Malena R.</div><div class="s5-service">Depilación Láser</div></div>
+          <div class="s5-card"><div class="s5-stars">★★★★★</div><div class="s5-text">"El facial premium es un antes y un después. Mi piel nunca estuvo tan bien. Lo hago cada mes."</div><div class="s5-name">Sofía B.</div><div class="s5-service">Facial Premium</div></div>
+          <div class="s5-card"><div class="s5-stars">★★★★★</div><div class="s5-text">"Me hice el HIFU y no lo puedo creer. 50 años y la piel tensada como nunca. Cien por ciento recomendado."</div><div class="s5-name">Carolina V.</div><div class="s5-service">HIFU Facial</div></div>
+        </div>
+        <div class="s5-footer">
+          <div class="s5-netika">Nétika</div>
+          <div class="s5-cta">Sacar turno ahora</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6 -->
+  <div class="slide-label">06 / 06 — CTA</div>
+  <div class="slide-wrap">
+    <div class="slide s6">
+      <div class="s6-photo"></div>
+      <div class="s6-overlay"></div>
+      <div class="s6-content">
+        <div>
+          <div class="s6-eyebrow">Tu centro puede tener esto</div>
+          <div class="s6-title">¿Le<br>hacemos<br><em>la tuya?</em></div>
+        </div>
+        <div class="s6-mid">
+          <div class="s6-q">"Una web que se vea tan bien como tus resultados hace que el cliente confíe antes de entrar por la puerta."</div>
+        </div>
+        <div class="s6-bottom">
+          <div>
+            <div class="s6-cl">Contacto</div>
+            <div class="s6-cv">hola@netika.com.ar</div>
+            <div class="s6-url">netika.com.ar</div>
+          </div>
+          <div class="s6-cta">Empezar ahora</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll('.slide').forEach(slide => {
+      const wrap = slide.parentElement;
+      function scale() {
+        const s = wrap.offsetWidth / 1080;
+        slide.style.transform = `scale(${s})`;
+        slide.style.transformOrigin = 'top left';
+        wrap.style.height = (1080 * s) + 'px';
+      }
+      scale();
+      window.addEventListener('resize', scale);
+    });
+  </script>
+</body>
+</html>
