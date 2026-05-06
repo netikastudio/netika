@@ -1040,8 +1040,7 @@
   <!-- ESTUDIO -->
   <section class="estudio" id="estudio">
     <div class="estudio-visual reveal">
-      <div class="estudio-box estudio-box-1">
-        <span class="est-icon">🏛️</span>
+      <div class="estudio-box estudio-box-1" style="background-image:url('https://images.unsplash.com/photo-1486325212027-8081e485255e?w=900&q=85&auto=format&fit=crop');background-size:cover;background-position:center;filter:brightness(.5);">
       </div>
       <div class="estudio-box estudio-box-2">
         <div class="est-badge-num">16</div>
@@ -1246,15 +1245,23 @@
     // PROJECT HOVER PREVIEW
     const preview = document.getElementById('preview');
     const previewInner = document.getElementById('previewInner');
-    const colors = ['#1C2A1C','#1C1C2A','#2A1C1C','#1C2A28','#28201C'];
+    const previewPhotos = {
+      '🏠': 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80&auto=format&fit=crop',
+      '🏢': 'https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=600&q=80&auto=format&fit=crop',
+      '🌿': 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80&auto=format&fit=crop',
+      '🏪': 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&q=80&auto=format&fit=crop',
+      '🏡': 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&q=80&auto=format&fit=crop',
+    };
 
     document.querySelectorAll('.proyecto-row').forEach((row, i) => {
-      const color = row.dataset.color || '#1A1A1A';
       const icon = row.dataset.icon || '🏛️';
+      const photo = previewPhotos[icon] || 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=600&q=80&auto=format&fit=crop';
       row.addEventListener('mouseenter', () => {
         preview.classList.add('visible');
-        previewInner.style.background = `linear-gradient(135deg, ${color}, #0A0A0A)`;
-        previewInner.innerHTML = `<span style="font-size:4rem;opacity:0.3">${icon}</span>`;
+        previewInner.style.backgroundImage = `url('${photo}')`;
+        previewInner.style.backgroundSize = 'cover';
+        previewInner.style.backgroundPosition = 'center';
+        previewInner.innerHTML = '';
       });
       row.addEventListener('mouseleave', () => preview.classList.remove('visible'));
       row.addEventListener('mousemove', e => {
