@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Carrusel Arquitectura · NÉTIKA</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Epilogue:wght@300;400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #111; font-family: 'Epilogue', sans-serif; display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 16px 8px; }
+
+    .slide-label { font-size: 10px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: #C8C8C8; background: rgba(200,200,200,.08); border: 1px solid rgba(200,200,200,.15); padding: 5px 14px; border-radius: 20px; align-self: flex-start; margin-left: 4px; }
+    .slide-wrap { width: 100%; max-width: 540px; position: relative; }
+    .slide { width: 1080px; height: 1080px; overflow: hidden; position: relative; transform-origin: top left; }
+
+    /* ══ SLIDE 1 — PORTADA ══ */
+    .s1 { background: #080808; }
+    .s1-photo { position: absolute; inset: 0; background-image: url('https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=1080&q=85&auto=format&fit=crop'); background-size: cover; background-position: center; opacity: .35; }
+    .s1-grid { position: absolute; inset: 0; pointer-events: none; }
+    .s1-gl { position: absolute; background: rgba(255,255,255,.04); }
+    .s1-glv { width: 1px; top: 0; bottom: 0; }
+    .s1-glh { height: 1px; left: 0; right: 0; }
+    .s1-content { position: relative; z-index: 2; height: 100%; padding: 80px; display: flex; flex-direction: column; justify-content: space-between; }
+    .s1-top { display: flex; justify-content: space-between; align-items: flex-start; }
+    .s1-tag { font-size: 11px; letter-spacing: .32em; text-transform: uppercase; color: rgba(200,200,200,.5); display: flex; align-items: center; gap: 12px; }
+    .s1-tag::before { content: ''; width: 24px; height: 1px; background: rgba(200,200,200,.4); }
+    .s1-netika { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: .4em; color: rgba(255,255,255,.2); }
+    .s1-main { }
+    .s1-num { font-family: 'Bebas Neue', sans-serif; font-size: 200px; color: rgba(255,255,255,.04); line-height: 1; letter-spacing: -.02em; position: absolute; bottom: 140px; right: 60px; }
+    .s1-title { font-family: 'Bebas Neue', sans-serif; font-size: 140px; line-height: .88; letter-spacing: .05em; color: #F5F5F3; }
+    .s1-title .accent { color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,.25); display: block; }
+    .s1-bottom { display: flex; justify-content: space-between; align-items: flex-end; padding-top: 40px; border-top: 1px solid rgba(255,255,255,.07); }
+    .s1-desc { font-size: 16px; color: rgba(255,255,255,.4); line-height: 1.7; max-width: 400px; font-weight: 300; }
+    .s1-swipe { font-size: 10px; letter-spacing: .24em; text-transform: uppercase; color: rgba(255,255,255,.25); display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+    .s1-swipe::after { content: '→'; }
+
+    /* ══ SLIDE 2 — HERO DEL SITIO ══ */
+    .s2 { background: #0A0A0A; display: flex; flex-direction: column; }
+    .s2-photo { position: absolute; inset: 0; background-image: url('https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1080&q=85&auto=format&fit=crop'); background-size: cover; background-position: center; opacity: .12; }
+    .s2-grid { position: absolute; inset: 0; pointer-events: none; }
+    .s2-gl { position: absolute; background: rgba(255,255,255,.035); }
+    .s2-glv { width: 1px; top: 0; bottom: 0; }
+    .s2-glh { height: 1px; left: 0; right: 0; }
+    .s2-header { position: relative; z-index: 2; padding: 52px 72px 44px; border-bottom: 1px solid rgba(255,255,255,.06); display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; }
+    .s2-hl { font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: rgba(255,255,255,.3); }
+    .s2-logo { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: .4em; color: #F5F5F3; text-align: center; }
+    .s2-hr { font-size: 10px; letter-spacing: .22em; text-transform: uppercase; color: rgba(255,255,255,.3); text-align: right; }
+    .s2-main { position: relative; z-index: 2; flex: 1; padding: 64px 72px; display: flex; flex-direction: column; justify-content: space-between; }
+    .s2-idx { font-family: 'Bebas Neue', sans-serif; font-size: 11px; letter-spacing: .3em; color: rgba(255,255,255,.2); margin-bottom: 40px; }
+    .s2-title { font-family: 'Bebas Neue', sans-serif; font-size: 160px; line-height: .85; letter-spacing: .04em; color: #F5F5F3; }
+    .s2-title .ghost { -webkit-text-stroke: 1px rgba(255,255,255,.15); color: transparent; display: block; }
+    .s2-sub { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 3rem; padding-top: 40px; border-top: 1px solid rgba(255,255,255,.06); }
+    .s2-sub-item { }
+    .s2-sub-l { font-size: 9px; letter-spacing: .26em; text-transform: uppercase; color: rgba(255,255,255,.22); margin-bottom: 8px; }
+    .s2-sub-v { font-size: 13px; color: rgba(255,255,255,.55); }
+    .s2-cta { font-size: 10px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: #0A0A0A; background: #F5F5F3; padding: 16px 28px; align-self: flex-end; white-space: nowrap; }
+    .s2-footer { position: relative; z-index: 2; display: flex; justify-content: space-between; padding: 24px 72px; border-top: 1px solid rgba(255,255,255,.06); }
+    .s2-netika { font-family: 'Bebas Neue', sans-serif; font-size: 14px; letter-spacing: .3em; color: rgba(255,255,255,.18); }
+    .s2-sn { font-size: 10px; letter-spacing: .2em; color: rgba(255,255,255,.14); }
+
+    /* ══ SLIDE 3 — PROYECTOS ══ */
+    .s3 { background: #080808; display: flex; flex-direction: column; }
+    .s3-header { position: relative; z-index: 2; padding: 56px 72px 40px; border-bottom: 1px solid rgba(255,255,255,.06); display: flex; justify-content: space-between; align-items: flex-end; }
+    .s3-sup { font-size: 10px; letter-spacing: .28em; text-transform: uppercase; color: rgba(255,255,255,.25); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+    .s3-sup::before { content: ''; width: 16px; height: 1px; background: rgba(255,255,255,.2); }
+    .s3-title { font-family: 'Bebas Neue', sans-serif; font-size: 72px; letter-spacing: .05em; color: #F5F5F3; line-height: 1; }
+    .s3-count { font-family: 'Bebas Neue', sans-serif; font-size: 72px; color: rgba(255,255,255,.08); letter-spacing: .05em; }
+    .s3-list { flex: 1; display: flex; flex-direction: column; }
+    .s3-item { display: grid; grid-template-columns: 80px 1fr 160px 100px 60px; align-items: center; gap: 2rem; padding: 28px 72px; border-bottom: 1px solid rgba(255,255,255,.05); transition: background .3s; }
+    .s3-item:hover { background: rgba(255,255,255,.02); }
+    .s3-idx { font-size: 10px; letter-spacing: .2em; color: rgba(255,255,255,.2); }
+    .s3-cat { font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: rgba(255,255,255,.28); margin-bottom: 6px; }
+    .s3-name { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: .08em; color: #F5F5F3; line-height: 1; }
+    .s3-loc { font-size: 12px; color: rgba(255,255,255,.28); }
+    .s3-year { font-size: 12px; color: rgba(255,255,255,.2); font-family: 'DM Serif Display', serif; font-style: italic; }
+    .s3-arr { width: 36px; height: 36px; border: 1px solid rgba(255,255,255,.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .8rem; color: rgba(255,255,255,.2); justify-self: end; }
+    .s3-footer { display: flex; justify-content: space-between; align-items: center; padding: 24px 72px; border-top: 1px solid rgba(255,255,255,.05); }
+    .s3-netika { font-family: 'Bebas Neue', sans-serif; font-size: 14px; letter-spacing: .3em; color: rgba(255,255,255,.15); }
+    .s3-tag { font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.08); padding: 8px 18px; }
+
+    /* ══ SLIDE 4 — SERVICIOS ══ */
+    .s4 { background: #080808; display: flex; flex-direction: column; position: relative; }
+    .s4-bg { position: absolute; inset: 0; background-image: url('https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1080&q=85&auto=format&fit=crop'); background-size: cover; background-position: center; opacity: .08; }
+    .s4-header { position: relative; z-index: 2; padding: 56px 72px 40px; border-bottom: 1px solid rgba(255,255,255,.07); display: flex; justify-content: space-between; align-items: flex-end; }
+    .s4-sup { font-size: 10px; letter-spacing: .28em; text-transform: uppercase; color: rgba(255,255,255,.25); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+    .s4-sup::before { content: ''; width: 16px; height: 1px; background: rgba(255,255,255,.2); }
+    .s4-title { font-family: 'Bebas Neue', sans-serif; font-size: 72px; letter-spacing: .05em; color: #F5F5F3; line-height: 1; }
+    .s4-desc { font-size: 14px; color: rgba(255,255,255,.3); line-height: 1.8; max-width: 320px; text-align: right; }
+    .s4-grid { position: relative; z-index: 2; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: rgba(255,255,255,.06); flex: 1; }
+    .s4-card { position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; }
+    .s4-card-photo { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform .6s; }
+    .s4-card:hover .s4-card-photo { transform: scale(1.05); }
+    .s4-card-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(8,8,8,.95) 0%, rgba(8,8,8,.4) 50%, rgba(8,8,8,.1) 100%); }
+    .s4-card-content { position: relative; z-index: 2; padding: 36px 32px; }
+    .s4-n { font-family: 'Bebas Neue', sans-serif; font-size: 48px; color: rgba(255,255,255,.15); line-height: 1; margin-bottom: 16px; letter-spacing: .05em; }
+    .s4-ct { font-family: 'DM Serif Display', serif; font-size: 22px; font-weight: 400; color: #F5F5F3; margin-bottom: 10px; line-height: 1.1; }
+    .s4-cd { font-size: 12px; color: rgba(255,255,255,.45); line-height: 1.7; }
+    .s4-footer { position: relative; z-index: 2; display: flex; justify-content: space-between; align-items: center; padding: 24px 72px; border-top: 1px solid rgba(255,255,255,.07); }
+    .s4-netika { font-family: 'Bebas Neue', sans-serif; font-size: 14px; letter-spacing: .3em; color: rgba(255,255,255,.18); }
+    .s4-sn { font-size: 10px; letter-spacing: .2em; color: rgba(255,255,255,.18); }
+
+    /* ══ SLIDE 5 — PROCESO ══ */
+    .s5 { background: #0E0E0D; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+    .s5-photo { position: absolute; inset: 0; background-image: url('https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=1080&q=85&auto=format&fit=crop'); background-size: cover; background-position: center; opacity: .08; }
+    .s5-content { position: relative; z-index: 2; flex: 1; padding: 72px; display: flex; flex-direction: column; }
+    .s5-sup { font-size: 10px; letter-spacing: .28em; text-transform: uppercase; color: rgba(255,255,255,.25); margin-bottom: 48px; display: flex; align-items: center; gap: 10px; }
+    .s5-sup::before { content: ''; width: 16px; height: 1px; background: rgba(255,255,255,.2); }
+    .s5-title { font-family: 'Bebas Neue', sans-serif; font-size: 80px; letter-spacing: .05em; color: #F5F5F3; line-height: .9; margin-bottom: 60px; }
+    .s5-steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: rgba(255,255,255,.06); flex: 1; }
+    .s5-step { background: #0E0E0D; padding: 36px 28px; position: relative; }
+    .s5-step::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: #F5F5F3; transform: scaleX(0); transform-origin: left; }
+    .s5-sn { font-family: 'Bebas Neue', sans-serif; font-size: 10px; letter-spacing: .22em; color: rgba(255,255,255,.2); margin-bottom: 24px; }
+    .s5-st { font-family: 'DM Serif Display', serif; font-size: 18px; font-weight: 400; color: #F5F5F3; margin-bottom: 12px; line-height: 1.1; }
+    .s5-sd { font-size: 11px; color: rgba(255,255,255,.3); line-height: 1.7; }
+    .s5-footer { position: relative; z-index: 2; display: flex; justify-content: space-between; align-items: center; padding: 28px 72px; border-top: 1px solid rgba(255,255,255,.06); }
+    .s5-netika { font-family: 'Bebas Neue', sans-serif; font-size: 14px; letter-spacing: .3em; color: rgba(255,255,255,.15); }
+    .s5-cta { font-size: 10px; font-weight: 500; letter-spacing: .18em; text-transform: uppercase; color: #0E0E0D; background: #F5F5F3; padding: 12px 24px; }
+
+    /* ══ SLIDE 6 — CIERRE ══ */
+    .s6 { background: #080808; position: relative; overflow: hidden; }
+    .s6-photo { position: absolute; inset: 0; background-image: url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1080&q=85&auto=format&fit=crop'); background-size: cover; background-position: center; opacity: .2; }
+    .s6-overlay { position: absolute; inset: 0; background: linear-gradient(160deg, rgba(8,8,8,.95) 0%, rgba(8,8,8,.6) 60%, rgba(8,8,8,.9) 100%); }
+    .s6-content { position: relative; z-index: 2; height: 100%; padding: 80px; display: flex; flex-direction: column; justify-content: space-between; }
+    .s6-top { }
+    .s6-eyebrow { font-size: 11px; letter-spacing: .3em; text-transform: uppercase; color: rgba(255,255,255,.28); margin-bottom: 36px; display: flex; align-items: center; gap: 12px; }
+    .s6-eyebrow::before { content: ''; width: 20px; height: 1px; background: rgba(255,255,255,.25); }
+    .s6-title { font-family: 'Bebas Neue', sans-serif; font-size: 128px; line-height: .85; letter-spacing: .04em; color: #F5F5F3; }
+    .s6-title .ghost { -webkit-text-stroke: 1px rgba(255,255,255,.15); color: transparent; display: block; }
+    .s6-mid { border-left: 1px solid rgba(255,255,255,.2); padding-left: 28px; }
+    .s6-q { font-family: 'DM Serif Display', serif; font-size: 20px; font-style: italic; color: rgba(255,255,255,.45); line-height: 1.6; }
+    .s6-bottom { display: flex; justify-content: space-between; align-items: flex-end; }
+    .s6-contact { }
+    .s6-cl { font-size: 9px; letter-spacing: .22em; text-transform: uppercase; color: rgba(255,255,255,.22); margin-bottom: 6px; }
+    .s6-cv { font-family: 'DM Serif Display', serif; font-size: 18px; font-style: italic; color: rgba(255,255,255,.5); }
+    .s6-url { font-size: 11px; color: rgba(255,255,255,.22); margin-top: 4px; letter-spacing: .05em; }
+    .s6-cta { font-size: 11px; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: #080808; background: #F5F5F3; padding: 18px 40px; }
+  </style>
+</head>
+<body>
+
+  <!-- SLIDE 1 -->
+  <div class="slide-label">01 / 06 — Portada</div>
+  <div class="slide-wrap">
+    <div class="slide s1">
+      <div class="s1-photo"></div>
+      <div class="s1-grid">
+        <div class="s1-gl s1-glv" style="left:25%"></div>
+        <div class="s1-gl s1-glv" style="left:50%"></div>
+        <div class="s1-gl s1-glv" style="left:75%"></div>
+        <div class="s1-gl s1-glh" style="top:40%"></div>
+      </div>
+      <div class="s1-num">03</div>
+      <div class="s1-content">
+        <div class="s1-top">
+          <div class="s1-tag">Diseño web · Arquitectura</div>
+          <div class="s1-netika">NÉTIKA</div>
+        </div>
+        <div class="s1-main">
+          <h1 class="s1-title">
+            Así se<br>ve tu<br>
+            <span class="accent">estudio.</span>
+          </h1>
+        </div>
+        <div class="s1-bottom">
+          <div class="s1-desc">Un sitio que comunica la precisión y el nivel de tu trabajo antes de la primera reunión.</div>
+          <div class="s1-swipe">Deslizá para ver</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2 -->
+  <div class="slide-label">02 / 06 — Hero del sitio</div>
+  <div class="slide-wrap">
+    <div class="slide s2">
+      <div class="s2-photo"></div>
+      <div class="s2-grid">
+        <div class="s2-gl s2-glv" style="left:25%"></div>
+        <div class="s2-gl s2-glv" style="left:50%"></div>
+        <div class="s2-gl s2-glv" style="left:75%"></div>
+        <div class="s2-gl s2-glh" style="top:45%"></div>
+      </div>
+      <div class="s2-header">
+        <div class="s2-hl">Sección hero</div>
+        <div class="s2-logo">FORMA</div>
+        <div class="s2-hr">Estudio de Arquitectura</div>
+      </div>
+      <div class="s2-main">
+        <div>
+          <div class="s2-idx">001 / 006</div>
+          <div class="s2-title">
+            FOR<span class="ghost">MA</span>
+          </div>
+        </div>
+        <div class="s2-sub">
+          <div class="s2-sub-item"><div class="s2-sub-l">Especialidad</div><div class="s2-sub-v">Residencial · Comercial · Interiorismo</div></div>
+          <div class="s2-sub-item"><div class="s2-sub-l">Filosofía</div><div class="s2-sub-v">Arquitectura que responde a quienes la habitan</div></div>
+          <div class="s2-sub-item"><div class="s2-sub-l">Buenos Aires</div><div class="s2-sub-v">Argentina · Est. 2008</div></div>
+          <div class="s2-cta">Ver proyectos →</div>
+        </div>
+      </div>
+      <div class="s2-footer">
+        <div class="s2-netika">NÉTIKA</div>
+        <div class="s2-sn">02 / 06</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3 -->
+  <div class="slide-label">03 / 06 — Proyectos</div>
+  <div class="slide-wrap">
+    <div class="slide s3">
+      <div class="s3-header">
+        <div>
+          <div class="s3-sup">Obra reciente</div>
+          <div class="s3-title">PROYECTOS</div>
+        </div>
+        <div class="s3-count">12</div>
+      </div>
+      <div class="s3-list">
+        <div class="s3-item">
+          <div class="s3-idx">001</div>
+          <div><div class="s3-cat">Residencial · Vivienda</div><div class="s3-name">CASA MIRABAL</div></div>
+          <div class="s3-loc">Nordelta, Bs. As.</div>
+          <div class="s3-year">2024</div>
+          <div class="s3-arr">↗</div>
+        </div>
+        <div class="s3-item">
+          <div class="s3-idx">002</div>
+          <div><div class="s3-cat">Comercial · Oficinas</div><div class="s3-name">TORRE ALCÁZAR</div></div>
+          <div class="s3-loc">Microcentro, CABA</div>
+          <div class="s3-year">2023</div>
+          <div class="s3-arr">↗</div>
+        </div>
+        <div class="s3-item">
+          <div class="s3-idx">003</div>
+          <div><div class="s3-cat">Interiorismo · Vivienda</div><div class="s3-name">LOFT PALERMO</div></div>
+          <div class="s3-loc">Palermo, CABA</div>
+          <div class="s3-year">2023</div>
+          <div class="s3-arr">↗</div>
+        </div>
+        <div class="s3-item">
+          <div class="s3-idx">004</div>
+          <div><div class="s3-cat">Comercial · Retail</div><div class="s3-name">SHOWROOM SIERRA</div></div>
+          <div class="s3-loc">San Isidro, Bs. As.</div>
+          <div class="s3-year">2023</div>
+          <div class="s3-arr">↗</div>
+        </div>
+        <div class="s3-item">
+          <div class="s3-idx">005</div>
+          <div><div class="s3-cat">Residencial · Country</div><div class="s3-name">QUINTA ALBO</div></div>
+          <div class="s3-loc">Pilar, Bs. As.</div>
+          <div class="s3-year">2022</div>
+          <div class="s3-arr">↗</div>
+        </div>
+      </div>
+      <div class="s3-footer">
+        <div class="s3-netika">NÉTIKA</div>
+        <div style="font-size:10px;letter-spacing:.2em;color:rgba(255,255,255,.15)">03 / 06</div>
+        <div class="s3-tag">Ver todos →</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4 -->
+  <div class="slide-label">04 / 06 — Servicios</div>
+  <div class="slide-wrap">
+    <div class="slide s4">
+      <div class="s4-bg"></div>
+      <div class="s4-header">
+        <div>
+          <div class="s4-sup">Servicios</div>
+          <div class="s4-title">QUÉ HACEMOS</div>
+        </div>
+        <p class="s4-desc">Desde el concepto hasta la llave en mano. La misma atención al detalle en cada etapa.</p>
+      </div>
+      <div class="s4-grid">
+        <div class="s4-card">
+          <div class="s4-card-photo" style="background-image:url('https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=600&q=85&auto=format&fit=crop')"></div>
+          <div class="s4-card-overlay"></div>
+          <div class="s4-card-content">
+            <div class="s4-n">01</div>
+            <div class="s4-ct">Proyecto Arquitectónico</div>
+            <div class="s4-cd">Diseño integral desde el anteproyecto hasta la documentación ejecutiva. Gestión de permisos municipales.</div>
+          </div>
+        </div>
+        <div class="s4-card">
+          <div class="s4-card-photo" style="background-image:url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=85&auto=format&fit=crop')"></div>
+          <div class="s4-card-overlay"></div>
+          <div class="s4-card-content">
+            <div class="s4-n">02</div>
+            <div class="s4-ct">Dirección de Obra</div>
+            <div class="s4-cd">Supervisión permanente de la construcción. Control de calidad, plazos y presupuesto.</div>
+          </div>
+        </div>
+        <div class="s4-card">
+          <div class="s4-card-photo" style="background-image:url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=85&auto=format&fit=crop')"></div>
+          <div class="s4-card-overlay"></div>
+          <div class="s4-card-content">
+            <div class="s4-n">03</div>
+            <div class="s4-ct">Interiorismo</div>
+            <div class="s4-cd">Diseño integral de interiores. Materiales, mobiliario, iluminación y terminaciones.</div>
+          </div>
+        </div>
+      </div>
+      <div class="s4-footer">
+        <div class="s4-netika">NÉTIKA</div>
+        <div class="s4-sn">04 / 06</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5 -->
+  <div class="slide-label">05 / 06 — Proceso</div>
+  <div class="slide-wrap">
+    <div class="slide s5">
+      <div class="s5-photo"></div>
+      <div class="s5-content">
+        <div class="s5-sup">Cómo trabajamos</div>
+        <div class="s5-title">CINCO<br>PASOS.</div>
+        <div class="s5-steps">
+          <div class="s5-step"><div class="s5-sn">01</div><div class="s5-st">Brief</div><div class="s5-sd">Reunión inicial para entender el proyecto. Sin cargos.</div></div>
+          <div class="s5-step"><div class="s5-sn">02</div><div class="s5-st">Anteproyecto</div><div class="s5-sd">Primeras propuestas. Plantas, cortes y perspectivas.</div></div>
+          <div class="s5-step"><div class="s5-sn">03</div><div class="s5-st">Proyecto Ejecutivo</div><div class="s5-sd">Documentación técnica completa y detalles constructivos.</div></div>
+          <div class="s5-step"><div class="s5-sn">04</div><div class="s5-st">Licitación</div><div class="s5-sd">Selección de contratistas y análisis de presupuestos.</div></div>
+          <div class="s5-step"><div class="s5-sn">05</div><div class="s5-st">Obra</div><div class="s5-sd">Dirección hasta la entrega con certificado de fin de obra.</div></div>
+        </div>
+      </div>
+      <div class="s5-footer">
+        <div class="s5-netika">NÉTIKA</div>
+        <div class="s5-cta">netika.studio</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6 -->
+  <div class="slide-label">06 / 06 — CTA</div>
+  <div class="slide-wrap">
+    <div class="slide s6">
+      <div class="s6-photo"></div>
+      <div class="s6-overlay"></div>
+      <div class="s6-content">
+        <div class="s6-top">
+          <div class="s6-eyebrow">Tu estudio puede tener esto</div>
+          <div class="s6-title">
+            ¿LE<br>
+            HACEMOS<br>
+            <span class="ghost">LA TUYA?</span>
+          </div>
+        </div>
+        <div class="s6-mid">
+          <div class="s6-q">"Un sitio que se vea tan preciso como tus planos hace que el cliente confíe antes de la primera reunión."</div>
+        </div>
+        <div class="s6-bottom">
+          <div class="s6-contact">
+            <div class="s6-cl">Contacto</div>
+            <div class="s6-cv">hola@netika.studio</div>
+            <div class="s6-url">netika.studio</div>
+          </div>
+          <div class="s6-cta">Empezar ahora</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll('.slide').forEach(slide => {
+      const wrap = slide.parentElement;
+      function scale() {
+        const s = wrap.offsetWidth / 1080;
+        slide.style.transform = `scale(${s})`;
+        slide.style.transformOrigin = 'top left';
+        wrap.style.height = (1080 * s) + 'px';
+      }
+      scale();
+      window.addEventListener('resize', scale);
+    });
+  </script>
+</body>
+</html>
