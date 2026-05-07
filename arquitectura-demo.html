@@ -581,13 +581,14 @@
     }
     .serv-card:hover { background: var(--gris-oscuro); }
     .serv-icon-wrap {
-      width: 80px; height: 60px;
-      background-size: cover; background-position: center;
-      margin-bottom: 2.5rem;
-      border-radius: 2px;
+      font-family: 'Bebas Neue', 'Arial Black', sans-serif;
+      font-size: 5rem; letter-spacing: .05em;
+      color: rgba(255,255,255,.06);
+      line-height: 1; margin-bottom: 2.5rem;
+      transition: color .4s;
     }
     .serv-card:hover .serv-icon-wrap {
-      opacity: .85;
+      color: rgba(255,255,255,.12);
     }
     .serv-name {
       font-family: var(--font-display);
@@ -1081,19 +1082,19 @@
     </div>
     <div class="servicios-grid">
       <div class="serv-card reveal">
-        <div class="serv-icon-wrap" style="background-image:url('https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=200&q=80&auto=format&fit=crop')"></div>
+        <div class="serv-icon-wrap">01</div>
         <h3 class="serv-name">PROYECTO ARQUITECTÓNICO</h3>
         <p class="serv-desc-card">Diseño integral desde el anteproyecto hasta la documentación ejecutiva. Gestión de permisos y aprobaciones municipales.</p>
         <span class="serv-num">01</span>
       </div>
       <div class="serv-card reveal reveal-delay-1">
-        <div class="serv-icon-wrap" style="background-image:url('https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=200&q=80&auto=format&fit=crop')"></div>
+        <div class="serv-icon-wrap">02</div>
         <h3 class="serv-name">DIRECCIÓN DE OBRA</h3>
         <p class="serv-desc-card">Supervisión permanente de la construcción. Control de calidad, plazos y presupuesto. Coordinación de gremios y proveedores.</p>
         <span class="serv-num">02</span>
       </div>
       <div class="serv-card reveal reveal-delay-2">
-        <div class="serv-icon-wrap" style="background-image:url('https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=200&q=80&auto=format&fit=crop')"></div>
+        <div class="serv-icon-wrap">03</div>
         <h3 class="serv-name">INTERIORISMO</h3>
         <p class="serv-desc-card">Diseño integral de interiores. Selección de materiales, mobiliario, iluminación y terminaciones. Espacios que funcionan y emocionan.</p>
         <span class="serv-num">03</span>
